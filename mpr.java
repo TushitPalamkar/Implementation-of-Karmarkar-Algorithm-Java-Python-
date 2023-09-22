@@ -142,7 +142,7 @@ public class mpr{
         System.out.println("Thus d = Xk * c - Xk * A^T * mu\n However we need to obtain the value of mu first\n");
 
 
-        System.out.println("To obtain mu multiplying A on both sides, on doing so we get \n A * Xk^2 * c = A * Xk^2 * AT * mu");
+        System.out.println("To obtain mu multiplying A Xk on both sides, on doing so we get \n A * Xk^2 * c = A * Xk^2 * AT * mu");
         System.out.println("Obtaining Xk^2\n");
         Xk2=matmultiply(Xk,Xk,m,n);
         matdisplay(Xk2,m,n);
