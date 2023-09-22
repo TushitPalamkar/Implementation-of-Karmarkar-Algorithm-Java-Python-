@@ -82,7 +82,6 @@ public class mpr{
     }
     public static int[][] matmultiply(int[][] a, int[][] b,int m, int n)
     {
-        Scanner sc = new Scanner(System.in);
         int [][] c = new int[m][n];
         int i,j,k;
         for(i=0;i<m;i++)
