@@ -135,9 +135,9 @@ public class mpr{
         Xk=diagonal(m,n);
         matdisplay(Xk,m,n);
         System.out.println("In order to solve the problem we find the lagrangian of the equation consisting of 2 parameters(d and mu) to determine the minimum value\n");
-        System.out.println("Therefore L(d,mu)= 1/2(XK * c - d)^2 + mu^T (A * Xk * d)");
+        System.out.println("Therefore L(d,mu)= 1/2(XK * c - d)^2 + mu^T *A * Xk * d");
         System.out.println("In order to obtain the gradient, we must differentiate the problem with respect to d\n The gradient= Zero");
-        System.out.println(" We get: -(Xk * c- d) + Xk * A^T * mu");
+        System.out.println(" We get: -(Xk * c- d) + Xk * A^T * mu = 0");
         System.out.println("Thus d = Xk * c - Xk * A^T * mu\n However we need to obtain the value of mu first\n");
         System.out.println("Multiplying A * Xk on both sides as d should satisfy the feasibility");
         System.out.println("A * Xk *d = A * Xk^2 * c - A * Xk * A^T * mu\n ");
