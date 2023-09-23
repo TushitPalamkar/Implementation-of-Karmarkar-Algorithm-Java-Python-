@@ -101,7 +101,7 @@ public class mpr{
     {
         int determinant;
         Scanner sc= new Scanner(System.in);
-        System.out.println("Consider the problem statement:\n Min: 1/2(Xk * c-d)^2\n Subject to A *Xk * d ");
+        System.out.println("Consider the problem statement:\n Min: 1/2(Xk * c-d)^2\n Subject to A *Xk * d = 0 ");
 
         System.out.println(" Enter the number of Rows:");
         int m=sc.nextInt();
@@ -139,9 +139,9 @@ public class mpr{
         System.out.println("In order to obtain the gradient, we must differentiate the problem with respect to d\n The gradient= Zero");
         System.out.println(" We get: -(Xk * c- d) + Xk * A^T * mu");
         System.out.println("Thus d = Xk * c - Xk * A^T * mu\n However we need to obtain the value of mu first\n");
-
-
-        System.out.println("To obtain mu multiplying A Xk on both sides, on doing so we get \n A * Xk^2 * c = A * Xk^2 * AT * mu");
+        System.out.println("Multiplying A * Xk on both sides as d should satisfy the feasibility");
+        System.out.println("A * Xk *d = A * Xk^2 * c - A * Xk * A^T * mu\n ");
+        System.out.println("Therefore A * Xk^2 * c = A * Xk^2 * A^T * mu\n");
         System.out.println("Obtaining Xk^2\n");
         Xk2=matmultiply(Xk,Xk,m,n);
         matdisplay(Xk2,m,n);
@@ -156,7 +156,7 @@ public class mpr{
         System.out.println("Solving the RHS:\n Since we have obtained the product of AXk2 already, the required answer can be obtained by multiplying it with AT");
         AXk2At=matmultiply(AXk2,transA,m,n);
         matdisplay(AXk2At,m,n);
-        System.out.printf("The elements of AXk2At are %d %d %d %d ",AXk2At[0][0],AXk2At[0][1],AXk2At[1][0],AXk2At[1][1]);
+        System.out.printf("The elements of AXk2At are d%d %d %d %d\n ",AXk2At[0][0],AXk2At[0][1],AXk2At[1][0],AXk2At[1][1]);
         determinant = (AXk2At[0][0] * AXk2At[1][1]) - (AXk2At[0][1] * AXk2At[1][0]);
 
         if (determinant != 0) {
