@@ -1,5 +1,5 @@
 import java.util.*;
-public class mpr{
+public class Main{
     public static int[][] matread(int m,int n)
     {   Scanner sc = new Scanner(System.in);
 
@@ -156,10 +156,11 @@ public class mpr{
         System.out.println("Solving the RHS:\n Since we have obtained the product of AXk2 already, the required answer can be obtained by multiplying it with AT");
         AXk2At=matmultiply(AXk2,transA,m,n);
         matdisplay(AXk2At,m,n);
-        System.out.printf("The elements of AXk2At are d%d %d %d %d\n ",AXk2At[0][0],AXk2At[0][1],AXk2At[1][0],AXk2At[1][1]);
+        System.out.printf("The elements of AXk2At are %d %d %d %d\n ",AXk2At[0][0],AXk2At[0][1],AXk2At[1][0],AXk2At[1][1]);
         determinant = (AXk2At[0][0] * AXk2At[1][1]) - (AXk2At[0][1] * AXk2At[1][0]);
 
-        if (determinant != 0) {
+        if (determinant != 0) 
+        {
 
             AXk2At[0][0] = AXk2At[1][1] / determinant;
             AXk2At[0][1] = -AXk2At[0][1] / determinant;
@@ -176,9 +177,8 @@ public class mpr{
                 }
                 System.out.println("\n");
             }
-        } else {
-            System.out.println("The matrix is not invertible (determinant is zero).");
-        }
+        
+       
         System.out.println("Now the matrix mu can be obtained by multplying the inverse of RHS with LHS i.e AX^2C * inverse of AXk^2");
         mu=matmultiply(AXk2c,AXk2At,m,n);
         matdisplay(mu,m,n);
@@ -195,6 +195,10 @@ public class mpr{
         System.out.println("Now d = Xk * c- Xk * A^T * mu");
         d=matsubtract(Xkc,XkAtmu,m,n);
         matdisplay(d,m,n);
-
+        }
+         else 
+        {
+            System.out.println("The matrix is not invertible (determinant is zero).");
+        }
     }
 }
