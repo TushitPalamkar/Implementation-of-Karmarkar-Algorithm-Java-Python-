@@ -1,0 +1,169 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class array2djava {
+    public static void main(String[] args) {
+        int rows = 2;
+        int cols = 2;
+
+        JFrame frame = new JFrame();
+        frame.setLayout(null);
+
+        JTextField[][] fielda = new JTextField[2][2];
+        JLabel mata = new JLabel("Matrix: A");
+        mata.setBounds(20, 20, 400, 20);
+        int x = 20;
+        for (int i = 0; i < rows; i++) {
+            int y = 50;
+            for (int j = 0; j < cols; j++) {
+                fielda[i][j] = new JTextField(5);
+                fielda[i][j].setBounds(x, y, 40, 20);
+                frame.add(fielda[i][j]);
+
+                y += 20;
+            }
+            x += 60;
+        }
+        JTextField[][] fieldxk = new JTextField[2][2];
+        JLabel matxk = new JLabel("Matrix: Xk");
+        matxk.setBounds(20, 100, 400, 20);
+        int x1 = 20;
+        for (int i = 0; i < rows; i++) {
+            int y1 = 120;
+            for (int j = 0; j < cols; j++) {
+                fieldxk[i][j] = new JTextField(5);
+                fieldxk[i][j].setBounds(x1, y1, 40, 20);
+                frame.add(fieldxk[i][j]);
+
+                y1 += 20;
+            }
+            x1 += 60;
+        }
+        JTextField[][] fieldc = new JTextField[2][2];
+        JLabel matc = new JLabel("Matrix: C");
+        matc.setBounds(20, 170, 400, 20);
+        int x2 = 20;
+        for (int i = 0; i < rows; i++) {
+            int y2 = 190;
+            for (int j = 0; j < cols; j++) {
+                fieldc[i][j] = new JTextField(5);
+                fieldc[i][j].setBounds(x2, y2, 40, 20);
+                frame.add(fieldc[i][j]);
+
+                y2 += 20;
+            }
+            x2 += 60;
+        }
+        JTextArea outputArea = new JTextArea();
+        outputArea.setBounds(20, 250, 200, 100);
+
+
+        JButton button = new JButton("Print");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int[][] A = new int[rows][cols];
+                int[][] Xk = new int[rows][cols];
+                int[][] C = new int[rows][cols];
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < cols; j++) {
+                        A[i][j] = Integer.parseInt(fielda[i][j].getText());
+                        Xk[i][j]=Integer.parseInt(fieldxk[i][j].getText());
+                        C[i][j]=Integer.parseInt(fieldc[i][j].getText());
+                    }
+                    //output.append("\n");
+                }
+                int [][] trans= transpose(A,2,2);
+                int[][] axk2 = matmultiply(A, matmultiply(Xk, Xk, 2, 2), 2, 2);
+                int[][] result1= matmultiply(axk2,C,2,2);
+                int [][] result3=matmultiply(axk2,trans,2,2) ;
+                int[][] inv = inverse(result3,2,2);
+                int [][] mu= matmultiply(result1,inv,2,2);
+                int [][]xkc= matmultiply(Xk,C,2,2);
+                int [][]xkatmu=matmultiply(Xk,matmultiply(trans,mu,2,2),2,2);
+                int[][] ans=matsubtract(xkc,xkatmu,2,2);
+                StringBuilder output= new StringBuilder();
+                outputArea.setText("Result:\n");
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < cols; j++) {
+                        outputArea.append(ans[i][j] + "\t");
+                    }
+                    outputArea.append("\n");
+                }
+                }
+            });
+
+        button.setBounds(240, 280, 80, 30);
+        button.setBackground(Color.white);
+        frame.getContentPane().setBackground(new Color(153,204,255));
+        frame.setSize(400, 400);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(button);
+        frame.add(mata);
+        frame.add(matc);
+        frame.add(matxk);
+
+        frame.add(outputArea);
+        frame.setVisible(true);
+
+    }
+    public static int[][] matmultiply(int[][] a, int[][] b,int m, int n)
+    {
+        int [][] c = new int[m][n];
+        int i,j,k;
+        for(i=0;i<m;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                for(k=0;k<n;k++)
+                {
+                    c[i][j]+=a[i][k] * b[k][j];
+                }
+            }
+        }
+        return c;
+    }
+    public static int[][] transpose(int a[][],int m, int n)
+    {
+        int [][] b= new int[m][n];
+        int i,j;
+        for(i=0;i<m;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                b[j][i]=a[i][j];
+            }
+
+        }
+        return b;
+    }
+    public static int[][] matsubtract(int[][] a, int [][] b, int m , int n)
+    {
+        int i,j;
+        int [][] c= new int[m][n];
+        for(i=0;i<m;i++)
+        {
+            for(j=0;j<n;j++)
+            {
+                c[i][j]=a[i][j]-b[i][j];
+            }
+        }
+        return c;
+
+    }
+    public static int[][] inverse(int a[][], int m, int n) {
+        int determinant = (a[0][0] * a[1][1]) - (a[0][1] * a[1][0]);
+
+        if (determinant != 0) {
+            a[0][0] = a[1][1] / determinant;
+            a[0][1] = -a[0][1] / determinant;
+            a[1][0] = -a[1][0] / determinant;
+            a[1][1] = a[0][0] / determinant;
+        }
+        return a;
+    }
+
+}
+
