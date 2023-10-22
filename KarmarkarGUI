@@ -73,7 +73,7 @@ public class array2djava {
                         Xk[i][j]=Integer.parseInt(fieldxk[i][j].getText());
                         C[i][j]=Integer.parseInt(fieldc[i][j].getText());
                     }
-                    //output.append("\n");
+                    
                 }
                 int [][] trans= transpose(A,2,2);
                 int[][] axk2 = matmultiply(A, matmultiply(Xk, Xk, 2, 2), 2, 2);
