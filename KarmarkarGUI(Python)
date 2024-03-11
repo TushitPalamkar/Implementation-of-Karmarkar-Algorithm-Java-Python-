@@ -1,0 +1,127 @@
+import numpy as np
+import tkinter as tk
+
+class MyFrame(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.rows = 2
+        self.cols = 2
+        self.title("Main MPR")
+        self.fielda = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+        self.fieldxk = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+        self.fieldc = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+
+        self.mata = tk.Label(self, text="Matrix: A")
+        self.matxk = tk.Label(self, text="Matrix: Xk")
+        self.matc = tk.Label(self, text="Matrix: C")
+        self.outputArea = tk.Text(self)
+        self.button = tk.Button(self, text="Print", command=self.calculate)
+
+        self.Output()
+
+    def Output(self):
+        self.geometry("400x400")
+
+
+        x, y = 20, 50
+        for i in range(self.rows):
+            x1 = x
+            for j in range(self.cols):
+                self.fielda[i][j] = tk.Entry(self, width=5)
+                self.fielda[i][j].place(x=x1, y=y)
+                x1 += 60
+            y += 20
+
+        x2, y2 = 20, 120
+        for i in range(self.rows):
+            x3 = x2
+            for j in range(self.cols):
+                self.fieldxk[i][j] = tk.Entry(self, width=5)
+                self.fieldxk[i][j].place(x=x3, y=y2)
+                x3 += 60
+            y2 += 20
+
+        x4, y4 = 20, 190
+        for i in range(self.rows):
+            x5 = x4
+            for j in range(self.cols):
+                self.fieldc[i][j] = tk.Entry(self, width=5)
+                self.fieldc[i][j].place(x=x5, y=y4)
+                x5 += 60
+            y4 += 20
+
+        self.mata.place(x=20, y=30)
+        self.matxk.place(x=20, y=100)
+        self.matc.place(x=20, y=170)
+        self.outputArea.place(x=20, y=250, width=200, height=100)
+        self.button.place(x=240, y=280, width=80, height=30)
+
+    def matsubtract(self, a, b, m, n):
+        c = [[0] * n for _ in range(m)]
+        for i in range(m):
+            for j in range(n):
+                c[i][j] = a[i][j] - b[i][j]
+        return c
+
+    def matmultiply(self,a, b, m, n):
+        c = np.zeros((m, n), dtype=int)
+        for i in range(m):
+            for j in range(n):
+                for k in range(n):
+                    c[i][j] += a[i][k] * b[k][j]
+        return c
+
+    def transpose(self,a, m, n):
+        b = np.zeros((n, m), dtype=int)
+        for i in range(m):
+            for j in range(n):
+                b[j][i] = a[i][j]
+        return b
+
+    def calculate(self):
+        A = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+        Xk = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+        C = [[0 for _ in range(self.cols)] for _ in range(self.rows)]
+
+        for i in range(self.rows):
+            for j in range(self.cols):
+                A[i][j] = int(self.fielda[i][j].get())
+                Xk[i][j] = int(self.fieldxk[i][j].get())
+                C[i][j] = int(self.fieldc[i][j].get())
+
+        trans = self.transpose(A,self.rows,self.cols)
+        k2 = self.matmultiply(Xk,Xk,self.rows,self.cols)
+        axk2=self.matmultiply(A,k2,self.rows,self.cols)
+        result1 = self.matmultiply(axk2,C,self.rows,self.cols)
+        result3 = self.matmultiply(axk2,trans,self.rows,self.cols)
+        print("The elements of AXk2At are d%d %d %d %d\n ", result3[0][0], result3[0][1], result3[1][0],
+                          result3[1][1]);
+        determinant = (result3[0][0] * result3[1][1]) - (result3[0][1] * result3[1][0])
+
+        if (determinant != 0) :
+            result3[0][0] = result3[1][1] / determinant;
+            result3[0][1] = -result3[0][1] / determinant;
+            result3[1][0] = -result3[1][0] / determinant;
+            result3[1][1] = result3[0][0] / determinant;
+        else:
+            print("The matrix is not invertible (determinant is zero).");
+
+        mu = self.matmultiply(result1,result3,self.rows,self.cols)
+        xkc = self.matmultiply(Xk, C,self.rows,self.cols)
+        # xkatmu = np.dot(Xk, np.dot(trans, mu))
+        atmu=self.matmultiply(trans, mu,self.rows,self.cols)
+        xkatmu=self.matmultiply(Xk, atmu,self.rows,self.cols)
+        ans = xkc - xkatmu
+        ans1= self.matsubtract(xkc,xkatmu,self.rows,self.cols)
+        self.print_ans(ans1)
+
+    def print_ans(self, ans):
+        self.outputArea.delete('1.0', tk.END)
+        self.outputArea.insert(tk.END, "Result:\n")
+        for row in ans:
+            self.outputArea.insert(tk.END, '\t'.join(map(str, row)) + '\n')
+
+if __name__ == "__main__":
+    MainMpr = MyFrame()
+    MainMpr.mainloop()
